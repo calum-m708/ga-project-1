@@ -20,10 +20,24 @@ const walls = [
 ];
 const exit = 39;
 
-let enemy1Start = 90;
-let enemy2Start = 145;
-let enemy3Start = 157;
-let enemy4Start = 58;
+const enemyArray = [
+  {
+    name: 'enemy1',
+    startPoint: 90,
+    speed: 1000,
+    position: 90,
+    endPoint: 93,
+    direction: 'right',
+  },
+  {
+    name: 'enemy2',
+    startPoint: 145,
+    speed: 500,
+    position: 149,
+    endPoint: 149,
+    direction: 'left',
+  },
+];
 
 function addPlayer() {
   cells[playerPosition].classList.add('player');
@@ -31,6 +45,13 @@ function addPlayer() {
 
 function removePlayer() {
   cells[playerPosition].classList.remove('player');
+}
+
+function addEnemy(enemyObject) {
+  cells[enemyObject.position].classList.add('enemy');
+}
+function removeEnemy(enemyObject) {
+  cells[enemyObject.position].classList.remove('enemy');
 }
 
 function createGrid() {
@@ -47,12 +68,43 @@ function createGrid() {
     cells.push(cell);
   }
   addPlayer();
+  addEnemy(enemyArray[0]);
+  addEnemy(enemyArray[1]);
+}
+function enemyMove(enemy) {
+  console.log(enemy.direction);
+  const movementID = setInterval(() => {
+    removeEnemy(enemy);
+    if (enemy.direction === 'right' && enemy.position < enemy.endPoint) {
+      enemy.position++;
+      console.log(enemy.position);
+    } else if (
+      enemy.direction === 'right' &&
+      enemy.position === enemy.endPoint
+    ) {
+      enemy.direction = 'left';
+      console.log(enemy.direction);
+    }
+    if (enemy.direction === 'left' && enemy.position > enemy.startPoint) {
+      enemy.position--;
+      console.log(enemy.position);
+    } else if (
+      enemy.direction === 'left' &&
+      enemy.position === enemy.startPoint
+    ) {
+      enemy.direction = 'right';
+      console.log(enemy.direction);
+    }
+    addEnemy(enemy);
+  }, enemy.speed);
 }
 function collideWithWall(direction) {
   return walls.includes(direction);
 }
 createGrid();
 
+enemyMove(enemyArray[0]);
+enemyMove(enemyArray[1]);
 function handleKeyUp(event) {
   removePlayer(playerPosition); // * remove pikachu from the current position
 
