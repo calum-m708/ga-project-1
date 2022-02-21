@@ -19,38 +19,116 @@ body {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
   display: flex;
   flex-wrap: wrap;
-  height: 100%;
   justify-content: center;
   height: 600px;
   width: 1200px;
 }
 
+.welcome-screen {
+  background-color: #181818;
+  background-image: url('../assets/MetalGearAssembly.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+button {
+  font-family: verdana;
+  align-self: end;
+  border-radius: 3px;
+  margin-bottom: 5%;
+  padding: 15px 20px;
+  font-size: 20px;
+  background-color: #181818;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+#start-button {
+  color: #1ab78b;
+  border: 5px solid #1ab78b;
+}
+
+#start-button:hover {
+  background-color: #1ab78b;
+  color: #181818;
+  cursor: pointer;
+}
+
+.game-over {
+  background-color: #181818;
+  background-image: url('../assets/mgsgameover.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  justify-content: space-evenly;
+}
+
+.game-over-button {
+  color: #de4649;
+  border: 5px solid #de4649;
+}
+
+.game-over-button:hover {
+  background-color: #de4649;
+  color: #181818;
+  cursor: pointer;
+}
 .grid div {
-  border: 1px solid lightgrey;
+  /* border: 1px solid lightgrey; */
   flex-grow: 1;
   height: 10%;
   width: 5%;
+  background-color: rgb(206, 206, 206);
 }
 
 .grid div.player {
-  background-image: url('../assets/player-sprite.png');
+  background-image: url('../assets/player.png');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 
 .enemy {
-  background-image: url('../assets/enemy-sprite.png');
+  background-image: url('../assets/guard.png');
   background-repeat: no-repeat;
   background-size: contain;
-  cursor: pointer;
 }
 
-.wall {
+.grid div.left,
+.grid div.right {
+  background-color: rgb(255, 244, 122);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(206, 206, 206),
+    rgb(255, 244, 122),
+    rgb(206, 206, 206)
+  );
+}
+
+.grid div.up,
+.grid div.down {
+  background-color: rgb(255, 244, 122);
+  background-image: linear-gradient(
+    to left,
+    rgb(206, 206, 206),
+    rgb(255, 244, 122),
+    rgb(206, 206, 206)
+  );
+}
+
+.grid div.wall {
   background-color: black;
   color: white;
+  border: none;
+  border-radius: 0;
+  background-image: none;
 }
 
-.exit {
+.grid div.exit {
   background-color: yellow;
+  background-image: linear-gradient(
+    to right,
+    rgb(206, 206, 206),
+    rgb(117, 252, 90)
+  );
 }
