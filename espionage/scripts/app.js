@@ -1,6 +1,5 @@
 // * Dom Elements
 const grid = document.querySelector('.grid');
-let cells = [];
 const start = document.querySelector('#start-button');
 const exit = document.querySelector('#exit');
 
@@ -8,30 +7,92 @@ const exit = document.querySelector('#exit');
 const width = 20;
 const height = 10;
 const cellCount = height * width;
-let movementID;
+let movementID = [];
 let playerPosition;
+let cells = [];
 let walls = [];
+let enemyArray = [];
 let running = true;
+const LEFT = -3;
+const RIGHT = 3;
+const UP = -60;
+const DOWN = 60;
+
+function checkCaught() {
+  if (cells[playerPosition].classList.contains('enemy')) {
+    console.log('player has run into enemy');
+    gameOver();
+  } else if (cells[playerPosition].classList.contains('vision')) {
+    console.log('player was seen by the enemy');
+    gameOver();
+  } else if (cells[playerPosition].classList.contains('exit')) {
+    objectiveAchieved();
+  }
+}
+
+function handleKeyUp(event) {
+  removePlayer(playerPosition); // * remove pikachu from the current position
+  switch (
+    event.keyCode // * calculate the next position and update it
+  ) {
+    // RIGHT
+    case 39:
+    case 68:
+      if (!collideWithWall(playerPosition + 1)) playerPosition++;
+      break;
+    // LEFT
+    case 37:
+    case 65:
+      if (!collideWithWall(playerPosition - 1)) playerPosition--;
+      break;
+    // UP
+    case 38:
+    case 87:
+      if (!collideWithWall(playerPosition - width)) playerPosition -= width;
+      break;
+    // DOWN
+    case 40:
+    case 83:
+      if (!collideWithWall(playerPosition + width)) playerPosition += width;
+      break;
+    default:
+      console.log('invalid key do nothing');
+  }
+
+  addPlayer(); // * add pikachu back at the new position
+  // if (cells[playerPosition].classList.contains('enemy')) {
+  //   console.log('player has run into enemy');
+
+  //   gameOver();
+  // } else if (cells[playerPosition].classList.contains('vision')) {
+  //   console.log('player was seen by the enemy');
+  //   gameOver();
+  // } else if (cells[playerPosition].classList.contains('exit')) {
+  //   objectiveAchieved();
+  // }
+}
 
 function objectiveAchieved() {
-  //clearInterval(movementID);
-  running = false;
+  clearInterval(movementID);
+  //running = false;
   console.log('Player has reached the end of the level');
 }
 
 function gameOver() {
   running = false;
-  // console.log('game over has been called');
-  // console.log(playerPosition);
-  // console.log(cells[playerPosition].classList);
-  // for (let i = 0; i < enemyArray.length; i++) {
-  //   clearInterval(movementID);
-  // }
-  clearInterval(movementID);
-  // for (let i = 0; i < enemyArray.length; i++) {
-  //   removeEnemy(enemyArray[i]);
-  // }
-  // removePlayer();
+  document.removeEventListener('keyup', handleKeyUp);
+  //Wait for everything else to finish executing
+  for (let i = 0; i < movementID.length; i++) {
+    clearInterval(movementID[i]);
+  }
+  console.log('Array at time of Game Over: ');
+  console.log(enemyArray);
+  // enemyArray = [];
+  enemyArray.length = 0;
+  // cells = [];
+  cells.length = 0;
+  console.log('Array after clearing during Game Over');
+  console.log(enemyArray);
   grid.innerHTML = '';
   grid.classList.add('game-over');
   grid.innerHTML =
@@ -48,88 +109,80 @@ function removePlayer() {
   cells[playerPosition].classList.remove('player');
 }
 
-function addEnemy(enemyObject) {
-  cells[enemyObject.position].classList.add('enemy');
-  if (enemyObject.direction === 'left') {
-    cells[enemyObject.position - 1].classList.add('vision', 'left');
-    cells[enemyObject.position - 2].classList.add('vision', 'left');
-    cells[enemyObject.position - 3].classList.add('vision', 'left');
-    if (
-      cells[enemyObject.position - 1].classList.contains('player') ||
-      cells[enemyObject.position - 2].classList.contains('player') ||
-      cells[enemyObject.position - 3].classList.contains('player')
-    ) {
-      gameOver();
-      console.log('enemy spotted the player');
-      // console.log('enemy position: ' + enemyObject.position);
+function addVision(position, direction) {
+  if (direction === 'left') {
+    for (i = 1; i <= 3; i++) {
+      cells[position - i].classList.add('vision', 'left');
+      if (cells[position - i].classList.contains('player')) {
+        gameOver();
+        console.log('enemy spotted the player');
+      }
     }
-  }
-  if (enemyObject.direction === 'right') {
-    cells[enemyObject.position + 1].classList.add('vision', 'right');
-    cells[enemyObject.position + 2].classList.add('vision', 'right');
-    cells[enemyObject.position + 3].classList.add('vision', 'right');
-    if (
-      cells[enemyObject.position + 1].classList.contains('player') ||
-      cells[enemyObject.position + 2].classList.contains('player') ||
-      cells[enemyObject.position + 3].classList.contains('player')
-    ) {
-      gameOver();
-      console.log('enemy spotted the player');
+  } else if (direction === 'right') {
+    for (i = 1; i <= 3; i++) {
+      cells[position + i].classList.add('vision', 'right');
+      if (cells[position + i].classList.contains('player')) {
+        gameOver();
+        console.log('enemy spotted the player');
+      }
     }
-  }
-  if (enemyObject.direction === 'up') {
-    cells[enemyObject.position - width].classList.add('vision', 'up');
-    cells[enemyObject.position - width * 2].classList.add('vision', 'up');
-    cells[enemyObject.position - width * 3].classList.add('vision', 'up');
-    if (
-      cells[enemyObject.position - width].classList.contains('player') ||
-      cells[enemyObject.position - width * 2].classList.contains('player') ||
-      cells[enemyObject.position - width * 3].classList.contains('player')
-    ) {
-      gameOver();
-      console.log('enemy spotted the player');
+  } else if (direction === 'up') {
+    for (i = 1; i <= 3; i++) {
+      cells[position - width * i].classList.add('vision', 'up');
+      if (cells[position - width * i].classList.contains('player')) {
+        gameOver();
+        console.log('enemy spotted the player');
+      }
     }
-  }
-  if (enemyObject.direction === 'down') {
-    cells[enemyObject.position + width].classList.add('vision', 'down');
-    cells[enemyObject.position + width * 2].classList.add('vision', 'down');
-    cells[enemyObject.position + width * 3].classList.add('vision', 'down');
-    if (
-      cells[enemyObject.position + width].classList.contains('player') ||
-      cells[enemyObject.position + width * 2].classList.contains('player') ||
-      cells[enemyObject.position + width * 3].classList.contains('player')
-    ) {
-      gameOver();
-      console.log('enemy spotted the player');
+  } else if (direction === 'down') {
+    for (i = 1; i <= 3; i++) {
+      cells[position + width * i].classList.add('vision', 'down');
+      if (cells[position + width * i].classList.contains('player')) {
+        gameOver();
+        console.log('enemy spotted the player');
+      }
     }
   }
 }
-function removeEnemy(enemyObject) {
-  cells[enemyObject.position].classList.remove('enemy');
-  if (enemyObject.direction === 'left') {
-    cells[enemyObject.position - 1].classList.remove('vision', 'left');
-    cells[enemyObject.position - 2].classList.remove('vision', 'left');
-    cells[enemyObject.position - 3].classList.remove('vision', 'left');
+function removeVision(position, direction) {
+  if (direction === 'left') {
+    for (let i = 1; i <= 3; i++) {
+      cells[position - i].classList.remove('vision', 'left');
+    }
   }
-  if (enemyObject.direction === 'right') {
-    cells[enemyObject.position + 1].classList.remove('vision', 'right');
-    cells[enemyObject.position + 2].classList.remove('vision', 'right');
-    cells[enemyObject.position + 3].classList.remove('vision', 'right');
+  if (direction === 'right') {
+    for (let i = 1; i <= 3; i++) {
+      cells[position + i].classList.remove('vision', 'right');
+    }
   }
-  if (enemyObject.direction === 'up') {
-    cells[enemyObject.position - width].classList.remove('vision', 'up');
-    cells[enemyObject.position - width * 2].classList.remove('vision', 'up');
-    cells[enemyObject.position - width * 3].classList.remove('vision', 'up');
+  if (direction === 'up') {
+    for (let i = 1; i <= 3; i++) {
+      cells[position - width * i].classList.remove('vision', 'up');
+    }
   }
-  if (enemyObject.direction === 'down') {
-    cells[enemyObject.position + width].classList.remove('vision', 'down');
-    cells[enemyObject.position + width * 2].classList.remove('vision', 'down');
-    cells[enemyObject.position + width * 3].classList.remove('vision', 'down');
+  if (direction === 'down') {
+    for (let i = 1; i <= 3; i++) {
+      cells[position + width * i].classList.remove('vision', 'down');
+    }
   }
 }
 
+function addEnemy(enemyObject) {
+  cells[enemyObject.position].classList.add('enemy');
+  addVision(enemyObject.position, enemyObject.direction);
+  if (cells[enemyObject.position].classList.contains('player')) {
+    console.log('enemy has run into player');
+
+    gameOver();
+  }
+}
+
+function removeEnemy(enemyObject) {
+  cells[enemyObject.position].classList.remove('enemy');
+  removeVision(enemyObject.position, enemyObject.direction);
+}
+
 function createGrid(wallsArray, exit) {
-  cells = [];
   for (let i = 0; i < cellCount; i++) {
     const cell = document.createElement('div');
     //cell.textContent = i;
@@ -143,48 +196,42 @@ function createGrid(wallsArray, exit) {
     cells.push(cell);
   }
 }
-function enemyMove(enemy) {
-  movementID = setInterval(() => {
+
+function switchDirection(direction) {
+  if (direction === 'right') return 'left';
+  else if (direction === 'left') return 'right';
+  else if (direction === 'up') return 'down';
+  else if (direction === 'down') return 'up';
+}
+function enemyMove(enemy, index) {
+  movementID[index] = setInterval(() => {
     if (running) {
       removeEnemy(enemy);
       if (enemy.direction === 'right' && enemy.position < enemy.endPoint) {
         enemy.position++;
-      } else if (
-        enemy.direction === 'right' &&
-        enemy.position === enemy.endPoint
-      ) {
-        enemy.direction = 'left';
       }
       if (enemy.direction === 'left' && enemy.position > enemy.startPoint) {
         enemy.position--;
-      } else if (
-        enemy.direction === 'left' &&
-        enemy.position === enemy.startPoint
-      ) {
-        enemy.direction = 'right';
       }
       if (enemy.direction === 'up' && enemy.position > enemy.endPoint) {
         enemy.position -= width;
-      } else if (
-        enemy.direction === 'up' &&
-        enemy.position === enemy.endPoint
-      ) {
-        enemy.direction = 'down';
       }
       if (enemy.direction === 'down' && enemy.position < enemy.startPoint) {
         enemy.position += width;
-      } else if (
-        enemy.direction === 'down' &&
+      }
+      if (
+        (enemy.direction === 'left' || enemy.direction === 'down') &&
         enemy.position === enemy.startPoint
       ) {
-        enemy.direction = 'up';
+        enemy.direction = switchDirection(enemy.direction);
       }
-      //console.log(enemy.position);
+      if (
+        (enemy.direction === 'right' || enemy.direction === 'up') &&
+        enemy.position === enemy.endPoint
+      ) {
+        enemy.direction = switchDirection(enemy.direction);
+      }
       addEnemy(enemy);
-      if (cells[enemy.position].classList.contains('player')) {
-        console.log('enemy has run into player');
-        gameOver();
-      }
     }
   }, enemy.speed);
 }
@@ -193,15 +240,15 @@ function collideWithWall(direction) {
 }
 
 function level1() {
+  console.log('Enemy array at beginning of Level1');
+  console.log(enemyArray);
   // * clear the welcome screen
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
-  //console.log(playerPosition);
   // * game variables
   const defaultPlayerPosition = 161;
   playerPosition = defaultPlayerPosition;
-  //console.log(playerPosition);
   walls = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     23, 26, 27, 28, 40, 46, 47, 48, 50, 51, 52, 53, 55, 56, 59, 60, 66, 67, 68,
@@ -213,7 +260,7 @@ function level1() {
   ];
   const exit = 39;
 
-  const enemyArray = [
+  const level1EnemyArray = [
     {
       name: 'enemy1',
       startPoint: 90,
@@ -247,59 +294,18 @@ function level1() {
       direction: 'up',
     },
   ];
-
+  enemyArray = level1EnemyArray;
+  console.log('Enemy array after being set');
+  console.log(enemyArray);
   createGrid(walls, exit);
 
   addPlayer(playerPosition);
   for (let i = 0; i < enemyArray.length; i++) {
     addEnemy(enemyArray[i]);
-    enemyMove(enemyArray[i]);
+    enemyMove(enemyArray[i], i);
   }
   running = true;
   document.addEventListener('keyup', handleKeyUp);
-
-  function handleKeyUp(event) {
-    removePlayer(playerPosition); // * remove pikachu from the current position
-    switch (
-      event.keyCode // * calculate the next position and update it
-    ) {
-      // RIGHT
-      case 39:
-      case 68:
-        if (!collideWithWall(playerPosition + 1)) playerPosition++;
-        break;
-      // LEFT
-      case 37:
-      case 65:
-        if (!collideWithWall(playerPosition - 1)) playerPosition--;
-        break;
-      // UP
-      case 38:
-      case 87:
-        if (!collideWithWall(playerPosition - width)) playerPosition -= width;
-        break;
-      // DOWN
-      case 40:
-      case 83:
-        if (!collideWithWall(playerPosition + width)) playerPosition += width;
-        break;
-      default:
-        console.log('invalid key do nothing');
-    }
-
-    addPlayer(); // * add pikachu back at the new position
-    if (cells[playerPosition].classList.contains('enemy')) {
-      gameOver();
-      console.log('player has run into enemy');
-    }
-    if (cells[playerPosition].classList.contains('vision')) {
-      gameOver();
-      console.log('player was seen by the enemy');
-    }
-    if (cells[playerPosition].classList.contains('exit')) {
-      objectiveAchieved();
-    }
-  }
 }
 
 start.addEventListener('click', level1);
