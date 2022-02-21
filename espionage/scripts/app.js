@@ -1,6 +1,6 @@
 // * Dom Elements
 const grid = document.querySelector('.grid');
-const cells = [];
+let cells = [];
 const start = document.querySelector('#start-button');
 const exit = document.querySelector('#exit');
 
@@ -20,11 +20,14 @@ function objectiveAchieved() {
 }
 
 function gameOver() {
-  console.log('game over has been called');
+  running = false;
+  // console.log('game over has been called');
+  // console.log(playerPosition);
+  // console.log(cells[playerPosition].classList);
   // for (let i = 0; i < enemyArray.length; i++) {
   //   clearInterval(movementID);
   // }
-  // clearInterval(movementID);
+  clearInterval(movementID);
   // for (let i = 0; i < enemyArray.length; i++) {
   //   removeEnemy(enemyArray[i]);
   // }
@@ -35,7 +38,6 @@ function gameOver() {
     '<button class="game-over-button" id="exit">Exit to Menu</button><button class="game-over-button" id="continue">Retry Level</button>';
   const retry = document.querySelector('#continue');
   retry.addEventListener('click', level1);
-  running = false;
 }
 
 function addPlayer() {
@@ -59,6 +61,7 @@ function addEnemy(enemyObject) {
     ) {
       gameOver();
       console.log('enemy spotted the player');
+      // console.log('enemy position: ' + enemyObject.position);
     }
   }
   if (enemyObject.direction === 'right') {
@@ -126,6 +129,7 @@ function removeEnemy(enemyObject) {
 }
 
 function createGrid(wallsArray, exit) {
+  cells = [];
   for (let i = 0; i < cellCount; i++) {
     const cell = document.createElement('div');
     //cell.textContent = i;
@@ -175,7 +179,7 @@ function enemyMove(enemy) {
       ) {
         enemy.direction = 'up';
       }
-      console.log(enemy.position);
+      //console.log(enemy.position);
       addEnemy(enemy);
       if (cells[enemy.position].classList.contains('player')) {
         console.log('enemy has run into player');
@@ -189,15 +193,15 @@ function collideWithWall(direction) {
 }
 
 function level1() {
-  running = true;
   // * clear the welcome screen
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
-
+  //console.log(playerPosition);
   // * game variables
   const defaultPlayerPosition = 161;
   playerPosition = defaultPlayerPosition;
+  //console.log(playerPosition);
   walls = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     23, 26, 27, 28, 40, 46, 47, 48, 50, 51, 52, 53, 55, 56, 59, 60, 66, 67, 68,
@@ -247,16 +251,11 @@ function level1() {
   createGrid(walls, exit);
 
   addPlayer(playerPosition);
-  addEnemy(enemyArray[0]);
-  addEnemy(enemyArray[1]);
-  addEnemy(enemyArray[2]);
-  addEnemy(enemyArray[3]);
-
-  enemyMove(enemyArray[0]);
-  enemyMove(enemyArray[1]);
-  enemyMove(enemyArray[2]);
-  enemyMove(enemyArray[3]);
-
+  for (let i = 0; i < enemyArray.length; i++) {
+    addEnemy(enemyArray[i]);
+    enemyMove(enemyArray[i]);
+  }
+  running = true;
   document.addEventListener('keyup', handleKeyUp);
 
   function handleKeyUp(event) {
@@ -304,4 +303,4 @@ function level1() {
 }
 
 start.addEventListener('click', level1);
-//exit.addEventListener('click' )
+// exit.addEventListener('click', function(){document.reload} )
