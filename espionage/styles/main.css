@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+
 * {
   box-sizing: border-box;
 }
@@ -76,6 +78,10 @@ button {
 }
 .grid div {
   /* border: 1px solid lightgrey; */
+  font-family: 'Major Mono Display', monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-grow: 1;
   height: 10%;
   width: 5%;
@@ -84,12 +90,6 @@ button {
 
 .grid div.player {
   background-image: url('../assets/player.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.enemy {
-  background-image: url('../assets/guard.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -116,6 +116,12 @@ button {
   );
 }
 
+.grid div.enemy {
+  background-image: url('../assets/guard.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .grid div.wall {
   background-color: black;
   color: white;
@@ -123,7 +129,30 @@ button {
   border-radius: 0;
   background-image: none;
 }
-
+.grid div.timer-down {
+  background-image: linear-gradient(
+    to top,
+    rgb(206, 206, 206),
+    rgb(233, 109, 222)
+  );
+}
+.grid div.timer-up {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(206, 206, 206),
+    rgb(233, 109, 222)
+  );
+}
+.grid div.enemy {
+  background-image: url('../assets/guard.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.grid div.player {
+  background-image: url('../assets/player.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 .grid div.exit {
   background-color: yellow;
   background-image: linear-gradient(
