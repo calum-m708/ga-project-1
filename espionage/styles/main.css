@@ -33,7 +33,12 @@ body {
   background-size: contain;
   background-position: center;
 }
-
+.tutorial {
+  background-color: #181818;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
 button {
   font-family: verdana;
   align-self: end;
@@ -46,12 +51,14 @@ button {
   font-weight: 600;
 }
 
-#start-button {
+#start-button,
+.start-level {
   color: #1ab78b;
   border: 5px solid #1ab78b;
 }
 
-#start-button:hover {
+#start-button:hover,
+.start-level:hover {
   background-color: #1ab78b;
   color: #181818;
   cursor: pointer;
@@ -94,6 +101,21 @@ button {
   background-size: contain;
 }
 
+.grid div.timer-down {
+  background-image: linear-gradient(
+    to top,
+    rgb(206, 206, 206),
+    rgb(233, 109, 222)
+  );
+}
+.grid div.timer-up {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(206, 206, 206),
+    rgb(233, 109, 222)
+  );
+}
+
 .grid div.left,
 .grid div.right {
   background-color: rgb(255, 244, 122);
@@ -129,20 +151,7 @@ button {
   border-radius: 0;
   background-image: none;
 }
-.grid div.timer-down {
-  background-image: linear-gradient(
-    to top,
-    rgb(206, 206, 206),
-    rgb(233, 109, 222)
-  );
-}
-.grid div.timer-up {
-  background-image: linear-gradient(
-    to bottom,
-    rgb(206, 206, 206),
-    rgb(233, 109, 222)
-  );
-}
+
 .grid div.enemy {
   background-image: url('../assets/guard.png');
   background-repeat: no-repeat;
@@ -160,4 +169,23 @@ button {
     rgb(206, 206, 206),
     rgb(117, 252, 90)
   );
+}
+
+.grid div.server {
+  background-image: url('../assets/server1.png');
+}
+.grid div.safe {
+  background-image: url('../assets/safe.png');
+}
+
+.end-screen {
+  background-color: #181818;
+  background-image: url('../assets/congratulations.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  font-family: 'Courier New', Courier, monospace;
+  color: #dfc534;
+  display: flex;
+  flex-direction: column;
 }

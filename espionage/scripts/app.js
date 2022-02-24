@@ -19,7 +19,20 @@ let running = true;
 let exit = 0;
 let currentLevelIndex = 0;
 // * other global variables (not reassigned per level)
-const levels = [level1, level2, level3, level4, level5];
+
+const levels = [
+  level1Tutorial,
+  level1,
+  level2Tutorial,
+  level2,
+  level3Tutorial,
+  level3,
+  level4Tutorial,
+  level4,
+  level5Tutorial,
+  level5,
+  endGame,
+];
 let caught = 0;
 
 function checkCaught() {
@@ -262,19 +275,33 @@ function timerStart(timer, index) {
 function placeTimers(object) {
   if (object.position < 40) {
     cells[object.position].classList.add('timer-down');
-    cells[object.position - 20].classList.add('computer-down');
   } else {
     cells[object.position].classList.add('timer-up');
-    cells[object.position + 20].classList.add('computer-up');
   }
 }
 // level functions - The actual game goes here
+
+function level1Tutorial() {
+  grid.innerHTML = '';
+  grid.classList.remove('welcome-screen');
+  grid.classList.remove('game-over');
+  grid.classList.add('tutorial');
+  grid.style.backgroundImage = "url('./assets/level1tutorial.png')";
+  grid.innerHTML =
+    '<button class="start-level" id="level1start">Start Level</button>';
+  const startLevel = document.querySelector('#level1start');
+  startLevel.style.marginBottom = '2%';
+  currentLevelIndex++;
+  startLevel.addEventListener('click', levels[currentLevelIndex]);
+}
 
 function level1() {
   // * clear the welcome screen
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
+  grid.classList.remove('tutorial');
+  grid.style.backgroundImage = '';
   // * define level specific variables
   const level1StartPosition = 161;
   const level1Exit = 39;
@@ -347,12 +374,27 @@ function level1() {
   document.addEventListener('keyup', handleKeyUp);
 }
 
-function level2() {
-  // * clear anything leftover on screen
-  // TODO Change this when transition screens are added
+function level2Tutorial() {
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
+  grid.classList.add('tutorial');
+  grid.style.backgroundImage = "url('./assets/level2tutorial.png')";
+  grid.innerHTML =
+    '<button class="start-level" id="level2start">Start Level</button>';
+  const startLevel = document.querySelector('#level2start');
+  startLevel.style.marginBottom = '2%';
+  currentLevelIndex++;
+  startLevel.addEventListener('click', levels[currentLevelIndex]);
+}
+
+function level2() {
+  // * clear anything leftover on screen
+  grid.innerHTML = '';
+  grid.classList.remove('welcome-screen');
+  grid.classList.remove('game-over');
+  grid.classList.remove('tutorial');
+  grid.style.backgroundImage = '';
   // * define level specific variables
   const level2StartPosition = 21;
   const level2Exit = 10;
@@ -427,24 +469,39 @@ function level2() {
       timerStart(timerArray[i], i);
     }
   }
+  cells[196].classList.add('server');
   // * set running as true, then start the event listener for key inputs
   running = true;
   document.addEventListener('keyup', handleKeyUp);
 }
 
-function level3() {
-  // * clear anything leftover on screen
-  // TODO Change this when transition screens are added
+function level3Tutorial() {
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
+  grid.classList.add('tutorial');
+  grid.style.backgroundImage = "url('./assets/level3tutorial.png')";
+  grid.innerHTML =
+    '<button class="start-level" id="level3start">Start Level</button>';
+  const startLevel = document.querySelector('#level3start');
+  startLevel.style.marginBottom = '2%';
+  currentLevelIndex++;
+  startLevel.addEventListener('click', levels[currentLevelIndex]);
+}
+function level3() {
+  // * clear anything leftover on screen
+  grid.innerHTML = '';
+  grid.classList.remove('welcome-screen');
+  grid.classList.remove('game-over');
+  grid.classList.remove('tutorial');
+  grid.style.backgroundImage = '';
   // * define level specific variables
   const level3StartPosition = 170;
   const level3Exit = 59;
   const level3EnemyArray = [
     {
       name: 'enemy1',
-      startPoint: 124,
+      startPoint: 144,
       speed: 1000,
       position: 124,
       endPoint: 44,
@@ -539,17 +596,31 @@ function level3() {
       timerStart(timerArray[i], i);
     }
   }
+  cells[4].classList.add('safe');
   // * set running as true, then start the event listener for key inputs
   running = true;
   document.addEventListener('keyup', handleKeyUp);
 }
-
-function level4() {
-  // * clear anything leftover on screen
-  // TODO Change this when transition screens are added
+function level4Tutorial() {
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
+  grid.classList.add('tutorial');
+  grid.style.backgroundImage = "url('./assets/level4tutorial.png')";
+  grid.innerHTML =
+    '<button class="start-level" id="level4start">Start Level</button>';
+  const startLevel = document.querySelector('#level4start');
+  startLevel.style.marginBottom = '2%';
+  currentLevelIndex++;
+  startLevel.addEventListener('click', levels[currentLevelIndex]);
+}
+function level4() {
+  // * clear anything leftover on screen
+  grid.innerHTML = '';
+  grid.classList.remove('welcome-screen');
+  grid.classList.remove('game-over');
+  grid.classList.remove('tutorial');
+  grid.style.backgroundImage = '';
   // * define level specific variables
   let bombsPlanted = 0;
   const level4StartPosition = 41;
@@ -558,7 +629,7 @@ function level4() {
     {
       name: 'enemy1',
       startPoint: 142,
-      speed: 1000,
+      speed: 500,
       position: 146,
       endPoint: 146,
       vision: 2,
@@ -576,7 +647,7 @@ function level4() {
     {
       name: 'enemy3',
       startPoint: 128,
-      speed: 1000,
+      speed: 750,
       position: 68,
       endPoint: 68,
       vision: 3,
@@ -585,7 +656,7 @@ function level4() {
     {
       name: 'enemy4',
       startPoint: 131,
-      speed: 1000,
+      speed: 900,
       position: 131,
       endPoint: 71,
       vision: 3,
@@ -594,7 +665,7 @@ function level4() {
     {
       name: 'enemy5',
       startPoint: 152,
-      speed: 1000,
+      speed: 400,
       position: 152,
       endPoint: 156,
       vision: 3,
@@ -603,7 +674,7 @@ function level4() {
     {
       name: 'enemy6',
       startPoint: 52,
-      speed: 1000,
+      speed: 750,
       position: 56,
       endPoint: 56,
       vision: 2,
@@ -693,18 +764,34 @@ function level4() {
       timerStart(timerArray[i], i);
     }
   }
+  cells[5].classList.add('server');
+  cells[11].classList.add('server');
+  cells[188].classList.add('server');
+  cells[194].classList.add('server');
   // * set running as true, then start the event listener for key inputs
   running = true;
   document.addEventListener('keyup', handleKeyUp);
 }
-
-function level5() {
-  // * clear anything leftover on screen
-  // TODO Change this when transition screens are added
-  // TODO Adding in the timer objective achievement &
+function level5Tutorial() {
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
+  grid.classList.add('tutorial');
+  grid.style.backgroundImage = "url('./assets/level5tutorial.png')";
+  grid.innerHTML =
+    '<button class="start-level" id="level5start">Start Level</button>';
+  const startLevel = document.querySelector('#level5start');
+  startLevel.style.marginBottom = '2%';
+  currentLevelIndex++;
+  startLevel.addEventListener('click', levels[currentLevelIndex]);
+}
+function level5() {
+  // * clear anything leftover on screen
+  grid.innerHTML = '';
+  grid.classList.remove('welcome-screen');
+  grid.classList.remove('game-over');
+  grid.classList.remove('tutorial');
+  grid.style.backgroundImage = '';
   // * define level specific variables
   const level5StartPosition = 81;
   const level5Exit = 59;
@@ -715,6 +802,7 @@ function level5() {
       speed: 500,
       position: 125,
       endPoint: 45,
+      vision: 3,
       direction: 'up',
     },
     {
@@ -723,6 +811,7 @@ function level5() {
       speed: 300,
       position: 46,
       endPoint: 53,
+      vision: 3,
       direction: 'right',
     },
     {
@@ -731,6 +820,7 @@ function level5() {
       speed: 300,
       position: 33,
       endPoint: 33,
+      vision: 3,
       direction: 'left',
     },
     {
@@ -739,6 +829,7 @@ function level5() {
       speed: 1000,
       position: 134,
       endPoint: 74,
+      vision: 3,
       direction: 'up',
     },
     {
@@ -747,6 +838,7 @@ function level5() {
       speed: 1000,
       position: 77,
       endPoint: 77,
+      vision: 3,
       direction: 'down',
     },
   ];
@@ -777,4 +869,18 @@ function level5() {
   running = true;
   document.addEventListener('keyup', handleKeyUp);
 }
-start.addEventListener('click', level1);
+function endGame() {
+  grid.innerHTML = '';
+  grid.classList.remove('welcome-screen');
+  grid.classList.remove('game-over');
+  grid.classList.remove('tutorial');
+  grid.classList.add('end-screen');
+  grid.style.backgroundImage = "url('./assets/congratulations.png";
+  grid.innerHTML = `<p>You were caught ${caught} times. Click the button below to start from the beginning<p><br><button class="start-level" id="restart">Return to Start</button>`;
+  const restart = document.querySelector('#restart');
+  restart.addEventListener('click', function () {
+    window.location.reload();
+  });
+}
+
+start.addEventListener('click', level1Tutorial);
