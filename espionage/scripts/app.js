@@ -18,6 +18,17 @@ let timerArray = [];
 let running = true;
 let exit = 0;
 let currentLevelIndex = 0;
+
+const audio = {
+  caught: new Audio('./assets/sounds/gameovercombined.wav'),
+  bgm1: new Audio('./assets/sounds/bgm1.wav'),
+  bgm2: new Audio('./assets/sounds/bgm2.wav'),
+  bgm3: new Audio('./assets/sounds/bgm3.wav'),
+  bgm4: new Audio('./assets/sounds/bgm4.wav'),
+  bgm5: new Audio('./assets/sounds/bgm5.wav'),
+  codec: new Audio('./assets/sounds/codeccall.wav'),
+  victory: new Audio('./assets/sounds/endscreen.wav'),
+};
 // * other global variables (not reassigned per level)
 
 const levels = [
@@ -79,7 +90,6 @@ function handleKeyUp(event) {
 }
 
 function objectiveAchieved() {
-  // TODO build a transition screen, and use the 'currentLevel' variable to determine the next level
   running = false;
   document.removeEventListener('keyup', handleKeyUp);
   for (let i = 0; i < movementID.length; i++) {
@@ -99,6 +109,12 @@ function objectiveAchieved() {
 }
 
 function gameOver() {
+  audio.bgm1.pause();
+  audio.bgm2.pause();
+  audio.bgm3.pause();
+  audio.bgm4.pause();
+  audio.bgm5.pause();
+  audio.caught.play();
   running = false;
   caught++;
   document.removeEventListener('keyup', handleKeyUp);
@@ -279,9 +295,11 @@ function placeTimers(object) {
     cells[object.position].classList.add('timer-up');
   }
 }
+
 // level functions - The actual game goes here
 
 function level1Tutorial() {
+  audio.codec.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -296,6 +314,8 @@ function level1Tutorial() {
 }
 
 function level1() {
+  audio.bgm1.loop = true;
+  audio.bgm1.play();
   // * clear the welcome screen
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
@@ -375,6 +395,8 @@ function level1() {
 }
 
 function level2Tutorial() {
+  audio.bgm1.pause();
+  audio.codec.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -390,6 +412,8 @@ function level2Tutorial() {
 
 function level2() {
   // * clear anything leftover on screen
+  audio.bgm2.loop = true;
+  audio.bgm2.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -476,6 +500,8 @@ function level2() {
 }
 
 function level3Tutorial() {
+  audio.bgm2.pause();
+  audio.codec.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -490,6 +516,8 @@ function level3Tutorial() {
 }
 function level3() {
   // * clear anything leftover on screen
+  audio.bgm3.loop = true;
+  audio.bgm3.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -602,6 +630,8 @@ function level3() {
   document.addEventListener('keyup', handleKeyUp);
 }
 function level4Tutorial() {
+  audio.bgm3.pause();
+  audio.codec.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -616,6 +646,8 @@ function level4Tutorial() {
 }
 function level4() {
   // * clear anything leftover on screen
+  audio.bgm4.loop = true;
+  audio.bgm4.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -773,6 +805,8 @@ function level4() {
   document.addEventListener('keyup', handleKeyUp);
 }
 function level5Tutorial() {
+  audio.bgm4.pause();
+  audio.codec.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -787,6 +821,8 @@ function level5Tutorial() {
 }
 function level5() {
   // * clear anything leftover on screen
+  audio.bgm5.loop = true;
+  audio.bgm5.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
@@ -870,6 +906,8 @@ function level5() {
   document.addEventListener('keyup', handleKeyUp);
 }
 function endGame() {
+  audio.bgm5.pause();
+  audio.victory.play();
   grid.innerHTML = '';
   grid.classList.remove('welcome-screen');
   grid.classList.remove('game-over');
