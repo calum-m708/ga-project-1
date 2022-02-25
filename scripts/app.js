@@ -1,3 +1,8 @@
+//TODO refactor the code and get it as dry as possible
+//TODO clean up the audio!
+//TODO add a timer that leads to a game over on the last level to fit with the story
+//TODO add a hidden timer that runs throughout the game, and is shown on the endscreen
+
 // * Dom Elements
 const grid = document.querySelector('.grid');
 const start = document.querySelector('#start-button');
